@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: taskmanagement-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: taskmanagement
+      POSTGRES_USER: taskmanager
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
