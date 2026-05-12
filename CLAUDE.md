@@ -22,7 +22,7 @@
 
 ### 2. ブランチ命名規則
 
-**フォーマット:** `{type}/issue-{番号}-{短い説明}`
+**フォーマット:** `{type}/{短い説明}-#{番号}`
 
 | type | 用途 |
 |------|------|
@@ -34,9 +34,9 @@
 | `chore` | 設定・依存関係などのメンテナンス |
 
 **例:**
-- `feature/issue-12-add-task-labels`
-- `fix/issue-34-task-drag-not-working`
-- `chore/issue-5-setup-docker`
+- `feature/add-task-labels-#12`
+- `fix/task-drag-not-working-#34`
+- `chore/setup-docker-#5`
 
 **禁止パターン:**
 - `main` への直接プッシュ
