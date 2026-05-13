@@ -94,11 +94,59 @@ Closes #12
 
 ---
 
+## サーバー起動・ポート管理（厳守）
+
+> **いかなる例外も認めません。**
+
+### 使用ポート
+
+| サーバー | ポート | 変更可否 |
+|---|---|---|
+| バックエンド（Spring Boot） | **8080** | 禁止 |
+| フロントエンド（Vite） | **5173** | 禁止 |
+| データベース（PostgreSQL） | **5432** | 禁止 |
+
+### ポート競合時の対応ルール
+
+サーバー起動前に必ずポートの使用状況を確認し、**競合している場合は該当プロセスを停止してから指定ポートで起動すること。**
+
+```powershell
+# ポート使用状況の確認
+netstat -ano | findstr :<ポート番号>
+
+# 競合プロセスの停止（PIDを確認してから実行）
+taskkill /PID <PID> /F
+```
+
+### 禁止事項
+
+- **別ポートでの代替起動は絶対に行わない**（例: 8081, 5174 など）
+- ポートを変更するためにアプリの設定ファイルを書き換えることも禁止
+- 理由: Viteプロキシ設定・CORS設定が特定ポートを前提としており、別ポートでは正常動作しない
+
+### 起動手順
+
+```powershell
+# 1. Dockerでデータベースを起動
+docker-compose up -d
+
+# 2. バックエンドを起動（ポート8080）
+cd backend
+.\gradlew bootRun
+
+# 3. フロントエンドを起動（別ターミナル、ポート5173）
+cd frontend
+npm run dev
+```
+
+---
+
 ## ディレクトリ構成
 
 ```
 TaskManagement/
 ├── backend/          # Spring Boot アプリケーション
+├── frontend/         # Vite + React + TypeScript
 ├── docs/             # ドキュメント類
 ├── prototype/        # HTML/CSS/JS プロトタイプ
 ├── docker-compose.yml
@@ -107,6 +155,6 @@ TaskManagement/
 
 ## 技術スタック
 
-- バックエンド: Java / Spring Boot
-- データベース: PostgreSQL（Docker）
-- フロントエンド: 未定（プロトタイプは HTML/CSS/JS）
+- バックエンド: Java / Spring Boot（ポート8080）
+- データベース: PostgreSQL（Docker、ポート5432）
+- フロントエンド: Vite + React + TypeScript（ポート5173）

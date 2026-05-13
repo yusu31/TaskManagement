@@ -64,7 +64,9 @@
         "Bash(env:*)",
         "Bash(export:*)",
         "Bash(set:*)",
-        "Bash(tree:*)"
+        "Bash(tree:*)",
+        "Bash(netstat:*)",
+        "Bash(taskkill /PID:*)"
       ],
       "deny": [
         "Bash(rm :*)",
@@ -81,7 +83,6 @@
         "Bash(chmod:*)",
         "Bash(chown:*)",
         "Bash(kill:*)",
-        "Bash(taskkill:*)",
         "Bash(shutdown:*)",
         "Bash(reboot:*)"
       ]
