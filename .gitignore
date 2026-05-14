@@ -4,3 +4,6 @@
 .github/create_issue.json
 .github/create_pr.json
 .github/create_pr2.json
+
+# Vite キャッシュ
+frontend/.vite/
