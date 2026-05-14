@@ -1,0 +1,60 @@
+.card {
+  background: #faf9ff;
+  border-radius: 10px;
+  padding: 12px 14px;
+  box-shadow: 0 2px 6px rgba(124, 58, 237, 0.08);
+  cursor: pointer;
+  transition: box-shadow 0.15s;
+}
+
+.card:hover {
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.16);
+}
+
+.title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #3d3557;
+  margin: 0 0 8px 0;
+  line-height: 1.4;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 99px;
+  letter-spacing: 0.02em;
+}
+
+.badgeHigh {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.badgeMedium {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.badgeLow {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.dueDate {
+  font-size: 0.75rem;
+  color: #7c6fa5;
+}
+
+.dueDateOverdue {
+  color: #ef4444;
+  font-weight: 600;
+}

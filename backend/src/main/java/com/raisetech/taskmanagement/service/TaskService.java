@@ -25,4 +25,11 @@ public class TaskService {
     public Optional<Task> findById(Long id) {
         return taskRepository.findById(id);
     }
+
+    public List<Task> searchTasks(String q, String status, String priority) {
+        String normalizedQ = (q != null && !q.isBlank()) ? q : null;
+        String normalizedStatus = (status != null && !status.isBlank()) ? status : null;
+        String normalizedPriority = (priority != null && !priority.isBlank()) ? priority : null;
+        return taskRepository.searchTasks(normalizedQ, normalizedStatus, normalizedPriority);
+    }
 }

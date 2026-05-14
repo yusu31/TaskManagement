@@ -1,0 +1,18 @@
+.board {
+  display: flex;
+  gap: 20px;
+  padding: 24px;
+  overflow-x: auto;
+  flex: 1;
+}
+
+.error {
+  padding: 24px;
+  color: #ef4444;
+  font-weight: 600;
+}
+
+.loading {
+  padding: 24px;
+  color: #7c6fa5;
+}
