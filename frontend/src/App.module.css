@@ -19,3 +19,21 @@
   color: #ffffff;
   letter-spacing: 0.05em;
 }
+
+/* ロゴとボタンの間にスペースを空けてボタンを右端に寄せる */
+.addButton {
+  margin-left: auto;
+  padding: 7px 16px;
+  background: #fff;
+  color: #7c3aed;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.addButton:hover {
+  background: #ede9fe;
+}
