@@ -1,0 +1,125 @@
+/* 画面全体を覆う半透明の暗い背景 */
+.overlay {
+  position: fixed;        /* スクロールしても常に画面に固定 */
+  inset: 0;               /* top/right/bottom/left をすべて 0 に（画面全体を覆う） */
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;           /* 他の要素より前面に表示 */
+}
+
+/* モーダル本体 */
+.modal {
+  background: #fff;
+  border-radius: 12px;
+  padding: 32px;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.title {
+  margin: 0 0 24px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.required {
+  color: #ef4444;
+}
+
+.input,
+.select,
+.textarea {
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  color: #1e293b;
+  background: #f9fafb;
+  transition: border-color 0.2s;
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+  outline: none;
+  border-color: #6d28d9;
+  background: #fff;
+}
+
+.textarea {
+  resize: vertical;  /* 縦方向にだけリサイズ可能 */
+}
+
+/* 優先度とステータスを横並びにする */
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.error {
+  color: #ef4444;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.cancelButton {
+  padding: 8px 20px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #fff;
+  color: #374151;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.cancelButton:hover {
+  background: #f3f4f6;
+}
+
+.submitButton {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 6px;
+  background: #6d28d9;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.submitButton:hover:not(:disabled) {
+  background: #5b21b6;
+}
+
+.submitButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
