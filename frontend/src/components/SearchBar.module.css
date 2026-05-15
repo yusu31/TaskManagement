@@ -1,66 +1,139 @@
+/* フィルターバー全体 */
 .bar {
+  background: #faf8ff;
+  border-bottom: 1.5px solid #e8e2ff;
+  padding: 8px 20px;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 14px 24px;
-  background: #ffffff;
-  border-bottom: 2px solid #ede9fe;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
+/* 検索インプット のラッパー */
+.searchWrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* 🔍 アイコン */
+.searchIcon {
+  position: absolute;
+  left: 9px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #b4aac8;
+  font-size: 0.85rem;
+  pointer-events: none;
+}
+
+/* テキスト入力欄 */
 .input {
-  flex: 1;
-  max-width: 360px;
-  padding: 8px 14px;
-  border: 2px solid #c4b5fd;
-  border-radius: 99px;
-  font-size: 0.9rem;
+  padding: 6px 10px 6px 28px;
+  border: 2px solid #e8e2ff;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-family: inherit;
+  background: #ffffff;
   color: #3d3557;
   outline: none;
-  transition: border-color 0.15s;
+  width: 180px;
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
 
 .input:focus {
-  border-color: #7c3aed;
+  border-color: #a78bfa;
+  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.15);
 }
 
 .input::placeholder {
-  color: #b4aac8;
+  color: #c4b5fd;
 }
 
-.btn {
-  padding: 8px 18px;
-  border-radius: 99px;
-  border: none;
-  font-size: 0.85rem;
+/* 「すべて」ボタン */
+.allBtn {
+  font-size: 0.76rem;
   font-weight: 700;
+  padding: 5px 12px;
+  border: none;
+  border-radius: 99px;
   cursor: pointer;
-  transition: transform 0.1s, box-shadow 0.1s;
-}
-
-.btnSearch {
+  font-family: inherit;
   background: #7c3aed;
   color: #fff;
-  box-shadow: 0 4px 0 #5b21b6;
+  box-shadow: 0 3px 0 #5b21b6;
+  transition: filter 0.15s, transform 0.1s, box-shadow 0.1s;
+  white-space: nowrap;
 }
 
-.btnSearch:active {
+.allBtn:hover {
+  filter: brightness(1.1);
+}
+
+.allBtn:active {
   transform: translateY(3px);
-  box-shadow: 0 1px 0 #5b21b6;
+  box-shadow: none;
 }
 
-.btnReset {
-  background: #ede9fe;
-  color: #6d28d9;
-  box-shadow: 0 4px 0 #c4b5fd;
+/* セパレーター（縦線） */
+.sep {
+  width: 1px;
+  height: 20px;
+  background: #e8e2ff;
+  flex-shrink: 0;
 }
 
-.btnReset:active {
-  transform: translateY(3px);
-  box-shadow: 0 1px 0 #c4b5fd;
+/* ラベルフィルターチップ */
+.chip {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 99px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.1s, box-shadow 0.1s;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.08);
+  white-space: nowrap;
+  font-family: inherit;
 }
 
-.resultInfo {
+.chip:active {
+  transform: translateY(2px);
+  box-shadow: none;
+}
+
+/* チップが選択中のとき */
+.chipActive {
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* 進捗表示（右端） */
+.progressWrap {
   margin-left: auto;
-  font-size: 0.82rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+  flex-shrink: 0;
+}
+
+.progressText {
+  font-size: 0.72rem;
+  font-weight: 700;
   color: #7c6fa5;
+  white-space: nowrap;
+}
+
+.progressBar {
+  width: 100px;
+  height: 5px;
+  background: #e8e2ff;
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: #7c3aed;
+  border-radius: 99px;
+  transition: width 0.4s ease;
 }

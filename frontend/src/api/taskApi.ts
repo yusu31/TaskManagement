@@ -1,4 +1,4 @@
-import type { Task, SearchParams, CreateTaskInput } from '../types/task';
+import type { Task, SearchParams, CreateTaskInput, UpdateTaskInput } from '../types/task';
 
 export async function fetchTasks(params: SearchParams = {}): Promise<Task[]> {
   const query = new URLSearchParams();
@@ -28,5 +28,25 @@ export async function createTask(input: CreateTaskInput): Promise<Task> {
   if (!res.ok) throw new Error(`API error: ${res.status}`);
 
   // サーバーから返ってきたJSONを Task 型のオブジェクトに変換して返す
+  return res.json();
+}
+
+// PUT /api/tasks/{id} にリクエストを送り、更新されたタスクを返す関数
+// id = どのタスクを更新するか（URLに含まれる番号）
+// input = 更新後の内容
+export async function updateTask(id: number, input: UpdateTaskInput): Promise<Task> {
+  const res = await fetch(`/api/tasks/${id}`, {
+    // createTask の POST と違い、PUT を使う
+    // PUT = 「このURLにあるデータを、このJSONで上書きして」という意味
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(input),
+  });
+
+  // 200 OK 以外はエラーとして扱う（404 = 存在しないタスク など）
+  if (!res.ok) throw new Error(`API error: ${res.status}`);
+
   return res.json();
 }

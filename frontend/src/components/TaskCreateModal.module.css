@@ -1,80 +1,209 @@
-/* 画面全体を覆う半透明の暗い背景 */
+/* 画面全体を覆う半透明の背景 */
 .overlay {
-  position: fixed;        /* スクロールしても常に画面に固定 */
-  inset: 0;               /* top/right/bottom/left をすべて 0 に（画面全体を覆う） */
-  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  inset: 0;
+  background: rgba(30, 20, 60, 0.45);
+  backdrop-filter: blur(3px);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 100;           /* 他の要素より前面に表示 */
+  z-index: 100;
+  padding: 16px;
 }
 
 /* モーダル本体 */
 .modal {
   background: #fff;
-  border-radius: 12px;
-  padding: 32px;
+  border-radius: 20px;
+  padding: 28px 28px 22px;
   width: 100%;
   max-width: 480px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 0 #5b21b6, 0 16px 48px rgba(60, 20, 120, 0.3);
+  position: relative;
+  animation: popIn 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
-.title {
-  margin: 0 0 24px;
-  font-size: 1.25rem;
+@keyframes popIn {
+  from { transform: scale(0.88); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+
+/* ✕ 閉じるボタン */
+.closeButton {
+  position: absolute;
+  top: 13px;
+  right: 13px;
+  background: #ede9fe;
+  border: none;
+  color: #7c3aed;
+  font-size: 0.9rem;
   font-weight: 700;
-  color: #1e293b;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: filter 0.15s;
+}
+
+.closeButton:hover { filter: brightness(0.92); }
+
+/* モーダルタイトル */
+.title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #7c3aed;
+  margin: 0 0 18px 0;
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
 }
 
-.label {
+/* フィールドのラベルテキスト（TITLE・説明・優先度などの見出し） */
+.fieldLabel {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: #374151;
+  gap: 4px;
+  font-size: 0.73rem;
+  font-weight: 700;
+  color: #a78bfa;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
-.required {
-  color: #ef4444;
-}
+.required { color: #ef4444; }
 
+/* テキスト入力・セレクト・テキストエリア共通 */
 .input,
 .select,
 .textarea {
-  padding: 8px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  color: #1e293b;
-  background: #f9fafb;
-  transition: border-color 0.2s;
+  padding: 9px 11px;
+  border: 2px solid #e8e2ff;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  color: #3d3557;
+  background: #faf9ff;
+  font-family: inherit;
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
 
 .input:focus,
 .select:focus,
 .textarea:focus {
   outline: none;
-  border-color: #6d28d9;
+  border-color: #a78bfa;
+  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.15);
   background: #fff;
 }
 
 .textarea {
-  resize: vertical;  /* 縦方向にだけリサイズ可能 */
+  resize: vertical;
+  min-height: 68px;
 }
 
-/* 優先度とステータスを横並びにする */
-.row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
+/* ===== ラベル管理エリア ===== */
+.labelManageWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
+
+/* 追加済みラベルチップ一覧 */
+.existingLabels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+/* 追加済みラベルチップ（クリックで削除） */
+.labelSelChip {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 99px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  user-select: none;
+  transition: filter 0.12s, transform 0.1s;
+}
+
+.labelSelChip:hover { filter: brightness(0.88); }
+.labelSelChip:active { transform: scale(0.93); }
+
+/* ラベル入力行（インプット + 追加ボタン） */
+.labelAddRow {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.labelAddInput {
+  flex: 1;
+  padding: 7px 10px;
+  border: 2px solid #e8e2ff;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-family: inherit;
+  background: #faf9ff;
+  color: #3d3557;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.labelAddInput:focus { border-color: #a78bfa; }
+.labelAddInput::placeholder { color: #c4b5fd; }
+
+.labelAddBtn {
+  background: #ede9fe;
+  border: none;
+  color: #7c3aed;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 7px 11px;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: inherit;
+  box-shadow: 0 2px 0 #ddd6fe;
+  transition: filter 0.12s, transform 0.1s, box-shadow 0.1s;
+}
+
+.labelAddBtn:hover { filter: brightness(0.95); }
+.labelAddBtn:active { transform: translateY(2px); box-shadow: none; }
+
+/* ===== 優先度 3Dボタングループ ===== */
+.priorityGroup {
+  display: flex;
+  gap: 8px;
+}
+
+.priorityBtn {
+  flex: 1;
+  padding: 9px 10px;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  font-family: inherit;
+  cursor: pointer;
+  background: #f0ecff;
+  color: #9d8ec8;
+  box-shadow: 0 4px 0 #ddd6fe;
+  transition: transform 0.1s, box-shadow 0.1s, background 0.15s, color 0.15s;
+}
+
+.priorityBtn:active { transform: translateY(4px); box-shadow: none; }
+
+.priorityBtnLow    { background: #d1fae5; color: #065f46; box-shadow: 0 4px 0 #6ee7b7; }
+.priorityBtnMedium { background: #fef3c7; color: #92400e; box-shadow: 0 4px 0 #fde68a; }
+.priorityBtnHigh   { background: #fee2e2; color: #b91c1c; box-shadow: 0 4px 0 #fca5a5; }
 
 .error {
   color: #ef4444;
@@ -82,44 +211,46 @@
   margin: 0;
 }
 
+/* ボタンエリア */
 .actions {
   display: flex;
   justify-content: flex-end;
-  gap: 12px;
-  margin-top: 8px;
+  align-items: center;
+  gap: 7px;
+  margin-top: 4px;
 }
 
 .cancelButton {
-  padding: 8px 20px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  background: #fff;
-  color: #374151;
-  font-size: 0.9rem;
+  padding: 7px 14px;
+  border: none;
+  border-radius: 8px;
+  background: #f0ecff;
+  color: #7c3aed;
+  font-size: 0.84rem;
+  font-weight: 700;
+  font-family: inherit;
   cursor: pointer;
+  box-shadow: 0 4px 0 #ddd6fe;
+  transition: transform 0.1s, box-shadow 0.1s, filter 0.1s;
 }
 
-.cancelButton:hover {
-  background: #f3f4f6;
-}
+.cancelButton:hover { filter: brightness(0.95); }
+.cancelButton:active { transform: translateY(4px); box-shadow: none; }
 
 .submitButton {
-  padding: 8px 20px;
+  padding: 7px 18px;
   border: none;
-  border-radius: 6px;
-  background: #6d28d9;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #a78bfa, #7c3aed);
   color: #fff;
-  font-size: 0.9rem;
-  font-weight: 600;
+  font-size: 0.84rem;
+  font-weight: 700;
+  font-family: inherit;
   cursor: pointer;
-  transition: background 0.2s;
+  box-shadow: 0 4px 0 #5b21b6;
+  transition: transform 0.1s, box-shadow 0.1s, filter 0.1s;
 }
 
-.submitButton:hover:not(:disabled) {
-  background: #5b21b6;
-}
-
-.submitButton:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
+.submitButton:hover:not(:disabled) { filter: brightness(1.1); }
+.submitButton:active:not(:disabled) { transform: translateY(4px); box-shadow: none; }
+.submitButton:disabled { opacity: 0.6; cursor: not-allowed; }
