@@ -2,6 +2,7 @@ package com.raisetech.taskmanagement.controller;
 
 import com.raisetech.taskmanagement.entity.Task;
 import com.raisetech.taskmanagement.request.CreateTaskRequest;
+import com.raisetech.taskmanagement.request.UpdateTaskRequest;
 import com.raisetech.taskmanagement.service.TaskService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -60,5 +61,23 @@ public class TaskController {
                 .toUri();                      // → /api/tasks/14 のようなURIができる
 
         return ResponseEntity.created(location).body(created);
+    }
+
+    // @PutMapping("/{id}") = PUT /api/tasks/{id} に来たリクエストがこのメソッドに届く
+    // {id} の部分は @PathVariable Long id で受け取る
+    @PutMapping("/{id}")
+    public ResponseEntity<Task> updateTask(
+            // @PathVariable = URLの {id} 部分をここに受け取る
+            @PathVariable Long id,
+            // @Valid = UpdateTaskRequest のバリデーションを実行
+            // @RequestBody = リクエストボディ（JSON）を UpdateTaskRequest に変換
+            @Valid @RequestBody UpdateTaskRequest request) {
+
+        // taskService.updateTask() は Optional<Task> を返す
+        // .map(ResponseEntity::ok) = タスクが見つかった場合 → 200 OK + タスクを返す
+        // .orElse(ResponseEntity.notFound().build()) = 見つからなかった場合 → 404 Not Found
+        return taskService.updateTask(id, request)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 }

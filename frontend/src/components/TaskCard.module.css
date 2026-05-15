@@ -1,24 +1,80 @@
 .card {
   background: #faf9ff;
-  border-radius: 10px;
-  padding: 12px 14px;
-  box-shadow: 0 2px 6px rgba(124, 58, 237, 0.08);
-  cursor: pointer;
-  transition: box-shadow 0.15s;
+  border: 1.5px solid #ede9fe;
+  border-radius: 11px;
+  padding: 9px 11px;
+  box-shadow: 0 2px 0 #ddd6fe;
+  cursor: grab;
+  transition: transform 0.15s, box-shadow 0.15s;
+  user-select: none;
 }
 
 .card:hover {
-  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.16);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 14px rgba(124, 99, 214, 0.18);
+  border-color: #c4b5fd;
 }
 
+.cardDragging {
+  opacity: 0.3;
+  transform: rotate(1.5deg);
+  cursor: grabbing;
+}
+
+/* ===== 付箋ラベル ===== */
+.labelBars {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 8px;
+}
+
+.labelBar {
+  display: inline-block;
+  padding: 4px 11px;
+  border-radius: 3px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-family: 'M PLUS Rounded 1c', sans-serif;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  position: relative;
+  /* 3D 付箋シャドウ */
+  box-shadow:
+    1px 2px 6px rgba(0, 0, 0, 0.2),
+    0 5px 12px rgba(0, 0, 0, 0.1),
+    0 1px 0 rgba(255, 255, 255, 0.55) inset;
+  transform: rotate(-1.5deg);
+  transform-origin: bottom left;
+}
+
+.labelBar:nth-child(even) {
+  transform: rotate(0.8deg);
+  transform-origin: bottom right;
+}
+
+/* 折れ目（右下コーナー） */
+.labelBar::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  right: -1px;
+  width: 9px;
+  height: 9px;
+  background: linear-gradient(225deg, rgba(0, 0, 0, 0.12) 50%, transparent 50%);
+  border-radius: 0 0 0 3px;
+}
+
+/* ===== タイトル ===== */
 .title {
   font-size: 0.9rem;
   font-weight: 600;
   color: #3d3557;
-  margin: 0 0 8px 0;
+  margin: 0 0 6px;
   line-height: 1.4;
 }
 
+/* ===== メタ（優先度・期限） ===== */
 .meta {
   display: flex;
   align-items: center;
@@ -34,20 +90,9 @@
   letter-spacing: 0.02em;
 }
 
-.badgeHigh {
-  background: #fee2e2;
-  color: #b91c1c;
-}
-
-.badgeMedium {
-  background: #fef3c7;
-  color: #92400e;
-}
-
-.badgeLow {
-  background: #d1fae5;
-  color: #065f46;
-}
+.badgeHigh   { background: #fee2e2; color: #b91c1c; }
+.badgeMedium { background: #fef3c7; color: #92400e; }
+.badgeLow    { background: #d1fae5; color: #065f46; }
 
 .dueDate {
   font-size: 0.75rem;
@@ -57,4 +102,31 @@
 .dueDateOverdue {
   color: #ef4444;
   font-weight: 600;
+}
+
+/* ===== 編集ボタン（右下） ===== */
+.cardActions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 6px;
+}
+
+.editButton {
+  background: none;
+  border: 1px solid #c4b5fd;
+  border-radius: 6px;
+  color: #7c3aed;
+  font-size: 0.72rem;
+  padding: 2px 8px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s, background 0.15s;
+}
+
+.card:hover .editButton {
+  opacity: 1;
+}
+
+.editButton:hover {
+  background: #ede9fe;
 }

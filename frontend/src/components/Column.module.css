@@ -1,46 +1,114 @@
 .column {
   background: #ffffff;
-  border-radius: 14px;
-  min-width: 280px;
-  width: 300px;
+  border-radius: 18px;
+  min-width: 268px;
+  width: 280px;
   flex-shrink: 0;
-  box-shadow: 0 4px 0 rgba(124, 58, 237, 0.12);
-  overflow: hidden;
+  box-shadow: 0 4px 0 #d8d0f5, 0 6px 20px rgba(0, 0, 0, 0.07);
+  border: 1.5px solid #e8e2ff;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+/* ドラッグ中のカードが上に乗っているとき */
+.columnDragOver {
+  box-shadow: 0 4px 0 #a78bfa, 0 6px 24px rgba(167, 139, 250, 0.3);
+  border-color: #a78bfa;
 }
 
 .colorBar {
   height: 5px;
   width: 100%;
+  border-radius: 18px 18px 0 0;
 }
 
+/* ヘッダー（タイトル・件数・追加ボタン） */
 .header {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 14px 16px 10px;
+  gap: 6px;
+  padding: 11px 11px 7px;
+  border-bottom: 1.5px solid #e8e2ff;
 }
 
 .title {
-  font-size: 0.95rem;
-  font-weight: 700;
+  font-size: 0.92rem;
+  font-weight: 800;
   margin: 0;
   flex: 1;
 }
 
 .count {
-  font-size: 0.78rem;
+  font-size: 0.68rem;
   font-weight: 700;
-  background: #ede9fe;
-  color: #6d28d9;
-  padding: 2px 8px;
+  background: #f0ecff;
+  color: #7c63d6;
+  padding: 2px 7px;
   border-radius: 99px;
 }
 
+/* ✏️ タスク追加ボタン */
+.addTaskBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #c4b5fd;
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, color 0.15s;
+  flex-shrink: 0;
+}
+
+.addTaskBtn:hover {
+  background: #ede9fe;
+}
+
+/* ソートボタン行 */
+.sortRow {
+  display: flex;
+  gap: 4px;
+  padding: 6px 11px 4px;
+}
+
+/* ソートボタン（未選択状態） */
+.sortBtn {
+  font-size: 0.66rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border: none;
+  border-radius: 99px;
+  cursor: pointer;
+  background: #f0ecff;
+  color: #9d8ec8;
+  font-family: inherit;
+  box-shadow: 0 2px 0 #ddd6fe;
+  transition: background 0.12s, color 0.12s, transform 0.1s, box-shadow 0.1s;
+}
+
+.sortBtn:active {
+  transform: translateY(2px);
+  box-shadow: none;
+}
+
+/* ソートボタン（選択中：紫になる） */
+.sortBtnActive {
+  background: #7c3aed;
+  color: #fff;
+  box-shadow: 0 2px 0 #5b21b6;
+}
+
+/* カードリスト */
 .cards {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 6px 12px 16px;
+  padding: 8px 8px 12px;
   min-height: 60px;
 }
 
@@ -49,4 +117,18 @@
   color: #b4aac8;
   font-size: 0.82rem;
   padding: 20px 0;
+}
+
+/* ドロップゾーン（カードとカードの間に表示されるライン） */
+.dropZone {
+  height: 4px;
+  border-radius: 99px;
+  transition: height 0.12s, background 0.12s;
+}
+
+/* ドラッグ中に上に乗ったとき：青紫のラインを表示 */
+.dropZoneActive {
+  height: 4px;
+  background: #7c3aed;
+  box-shadow: 0 0 6px rgba(124, 58, 237, 0.5);
 }

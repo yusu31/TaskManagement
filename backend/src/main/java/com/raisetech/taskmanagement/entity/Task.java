@@ -3,6 +3,8 @@ package com.raisetech.taskmanagement.entity;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "tasks")
@@ -25,6 +27,14 @@ public class Task {
     private Integer position;
 
     private LocalDate dueDate;
+
+    // @ElementCollection = 1つのタスクに複数のラベルを持たせるための設定
+    // FetchType.EAGER = タスクを取得するとき、ラベルも一緒に取得する
+    // @CollectionTable = ラベル専用テーブル（task_labels）を自動作成する
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "task_labels", joinColumns = @JoinColumn(name = "task_id"))
+    @Column(name = "label")
+    private List<String> labels = new ArrayList<>();
 
     @Column(updatable = false)
     private LocalDateTime createdAt;
@@ -65,4 +75,7 @@ public class Task {
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
+
+    public List<String> getLabels() { return labels; }
+    public void setLabels(List<String> labels) { this.labels = labels; }
 }

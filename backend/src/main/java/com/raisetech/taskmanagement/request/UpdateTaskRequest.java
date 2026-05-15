@@ -5,32 +5,25 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.List;
 
-public class CreateTaskRequest {
+// UpdateTaskRequest = PUT /api/tasks/{id} で受け取るリクエストのデータ構造
+// CreateTaskRequest とほぼ同じだが、「更新」専用として分けておくことで
+// 将来バリデーションルールが変わっても影響を受けない
+public class UpdateTaskRequest {
 
-    // @NotBlank = 「空欄・空白だけはNG」というバリデーション（入力チェック）
-    // @Size(max=255) = 255文字を超えてはいけない
+    // 更新時もタイトルは必須
     @NotBlank(message = "タイトルは必須です")
     @Size(max = 255, message = "タイトルは255文字以内で入力してください")
     private String title;
 
-    // descriptionは任意入力なのでバリデーションなし
     private String description;
 
-    // 優先度: HIGH / MEDIUM / LOW のいずれか
     private String priority;
 
-    // ステータス: TODO / IN_PROGRESS / DONE のいずれか
     private String status;
 
-    // 期日（任意）
     private LocalDate dueDate;
 
-    // ラベル（複数選択可、任意）
     private List<String> labels;
-
-    // --- getter / setter ---
-    // Javaのクラスではフィールドを private にして
-    // getter/setter でアクセスするのが慣習（カプセル化）
 
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
