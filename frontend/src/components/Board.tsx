@@ -13,11 +13,12 @@ interface Props {
   loading: boolean;
   error: string | null;
   onEdit: (task: Task) => void;
+  onDelete: (id: number) => void;
   onAddTask: (status: Status) => void;
   onDrop: (taskId: number, newStatus: Status, toIndex: number) => void;
 }
 
-export function Board({ tasks, loading, error, onEdit, onAddTask, onDrop }: Props) {
+export function Board({ tasks, loading, error, onEdit, onDelete, onAddTask, onDrop }: Props) {
   if (loading) return <p className={styles.loading}>読み込み中...</p>;
   if (error)   return <p className={styles.error}>{error}</p>;
 
@@ -37,6 +38,7 @@ export function Board({ tasks, loading, error, onEdit, onAddTask, onDrop }: Prop
           column={col}
           tasks={tasksByStatus[col.status] ?? []}
           onEdit={onEdit}
+          onDelete={onDelete}
           onAddTask={onAddTask}
           onDrop={onDrop}
         />

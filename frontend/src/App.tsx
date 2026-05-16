@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import type { Task, Status, FilterState } from './types/task';
-import { fetchTasks, updateTask } from './api/taskApi';
+import { fetchTasks, updateTask, deleteTask } from './api/taskApi';
 import { SearchBar } from './components/SearchBar';
 import { Board } from './components/Board';
 import { TaskCreateModal } from './components/TaskCreateModal';
@@ -144,6 +144,19 @@ function App() {
   const handleUpdated = () => load();
   const handleEditClose = () => setEditingTask(null);
 
+  // ===== タスク削除 =====
+  const handleDelete = useCallback(async (id: number) => {
+    // 楽観的更新：APIの結果を待たずに画面からタスクを消す
+    setAllTasks((prev) => prev.filter((t) => t.id !== id));
+    try {
+      await deleteTask(id);
+    } catch {
+      // 失敗したら再取得して元の状態に戻す
+      load();
+      alert('削除に失敗しました。もう一度お試しください。');
+    }
+  }, [load]);
+
   // ===== カラム追加フォーム =====
   const handleOpenAddColumn = () => {
     setIsAddingColumn(true);
@@ -208,6 +221,7 @@ function App() {
         loading={loading}
         error={error}
         onEdit={handleEdit}
+        onDelete={handleDelete}
         onAddTask={handleAddTask}
         onDrop={handleDrop}
       />

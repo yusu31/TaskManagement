@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { Task } from '../types/task';
 import { getLabelStyle } from '../types/task';
+import { DeleteConfirmModal } from './DeleteConfirmModal';
 import styles from './TaskCard.module.css';
 
 const PRIORITY_LABELS: Record<string, string> = {
@@ -14,10 +15,12 @@ const PRIORITY_STYLE: Record<string, string> = {
 interface Props {
   task: Task;
   onEdit: (task: Task) => void;
+  onDelete: (id: number) => void;
 }
 
-export function TaskCard({ task, onEdit }: Props) {
+export function TaskCard({ task, onEdit, onDelete }: Props) {
   const [isDragging, setIsDragging] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const isOverdue =
     task.dueDate != null && new Date(task.dueDate) < new Date(new Date().toDateString());
@@ -32,6 +35,7 @@ export function TaskCard({ task, onEdit }: Props) {
   const handleDragEnd = () => setIsDragging(false);
 
   return (
+    <>
     <div
       className={`${styles.card} ${isDragging ? styles.cardDragging : ''}`}
       draggable
@@ -74,7 +78,7 @@ export function TaskCard({ task, onEdit }: Props) {
         )}
       </div>
 
-      {/* 編集ボタン（右下） */}
+      {/* 操作ボタン（右下） */}
       <div className={styles.cardActions}>
         <button
           className={styles.editButton}
@@ -82,7 +86,22 @@ export function TaskCard({ task, onEdit }: Props) {
         >
           編集
         </button>
+        <button
+          className={styles.deleteButton}
+          onClick={(e) => { e.stopPropagation(); setShowDeleteModal(true); }}
+        >
+          削除
+        </button>
       </div>
     </div>
+
+    {showDeleteModal && (
+      <DeleteConfirmModal
+        taskTitle={task.title}
+        onConfirm={() => { setShowDeleteModal(false); onDelete(task.id); }}
+        onCancel={() => setShowDeleteModal(false)}
+      />
+    )}
+    </>
   );
 }

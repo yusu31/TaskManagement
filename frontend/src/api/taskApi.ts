@@ -31,6 +31,17 @@ export async function createTask(input: CreateTaskInput): Promise<Task> {
   return res.json();
 }
 
+// DELETE /api/tasks/{id} にリクエストを送る関数
+// 削除成功時は 204 No Content が返るのでボディは読まない（戻り値は void）
+export async function deleteTask(id: number): Promise<void> {
+  const res = await fetch(`/api/tasks/${id}`, {
+    method: 'DELETE',
+  });
+
+  // 204 以外はエラーとして扱う（404 = 存在しないタスク など）
+  if (!res.ok) throw new Error(`API error: ${res.status}`);
+}
+
 // PUT /api/tasks/{id} にリクエストを送り、更新されたタスクを返す関数
 // id = どのタスクを更新するか（URLに含まれる番号）
 // input = 更新後の内容

@@ -63,6 +63,17 @@ public class TaskService {
         return taskRepository.save(task);
     }
 
+    // deleteTask = DELETE /api/tasks/{id} に対応するメソッド
+    // 戻り値が boolean な理由: 削除できた(true) / IDが存在しなかった(false) をControllerに伝えるため
+    @Transactional
+    public boolean deleteTask(Long id) {
+        if (!taskRepository.existsById(id)) {
+            return false;
+        }
+        taskRepository.deleteById(id);
+        return true;
+    }
+
     // updateTask = PUT /api/tasks/{id} に対応するメソッド
     // Optional<Task> を返す理由: 指定した id のタスクが存在しない場合は
     // 「空」を返して Controller 側で 404 にするため

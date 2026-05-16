@@ -18,11 +18,12 @@ interface Props {
   column: ColumnDef;
   tasks: Task[];
   onEdit: (task: Task) => void;
+  onDelete: (id: number) => void;
   onAddTask: (status: Status) => void;
   onDrop: (taskId: number, newStatus: Status, toIndex: number) => void;
 }
 
-export function Column({ column, tasks, onEdit, onAddTask, onDrop }: Props) {
+export function Column({ column, tasks, onEdit, onDelete, onAddTask, onDrop }: Props) {
   const [sortKey, setSortKey] = useState<SortKey>(null);
   const [dropIndex, setDropIndex] = useState<number | null>(null);
   // ドロップ直前に最後に示していたインデックスを記録するためのRef
@@ -132,7 +133,7 @@ export function Column({ column, tasks, onEdit, onAddTask, onDrop }: Props) {
             />
             {sortedTasks.map((task, i) => (
               <>
-                <TaskCard key={task.id} task={task} onEdit={onEdit} />
+                <TaskCard key={task.id} task={task} onEdit={onEdit} onDelete={onDelete} />
                 <div
                   key={`zone-${task.id}`}
                   className={`${styles.dropZone} ${dropIndex === i + 1 ? styles.dropZoneActive : ''}`}
