@@ -1,12 +1,14 @@
 .card {
   background: #faf9ff;
   border: 1.5px solid #ede9fe;
-  border-radius: 11px;
-  padding: 9px 11px;
+  border-radius: 9px;
+  padding: 6px 9px 5px;
   box-shadow: 0 2px 0 #ddd6fe;
   cursor: grab;
   transition: transform 0.15s, box-shadow 0.15s;
   user-select: none;
+  position: relative;
+  overflow: visible;  /* ラベルが上にはみ出せるように */
 }
 
 .card:hover {
@@ -21,71 +23,64 @@
   cursor: grabbing;
 }
 
-/* ===== 付箋ラベル ===== */
-.labelBars {
+/* ===== 付箋タブ（カード上端からはみ出す） ===== */
+.labelTabs {
+  position: absolute;
+  top: -3px;        /* ほんの少しだけはみ出す */
+  right: 8px;
   display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  margin-bottom: 8px;
+  gap: 3px;
+  align-items: flex-end;  /* タブの底辺をカード上端に揃える */
 }
 
-.labelBar {
-  display: inline-block;
-  padding: 4px 11px;
-  border-radius: 3px;
-  font-size: 0.72rem;
-  font-weight: 700;
-  font-family: 'M PLUS Rounded 1c', sans-serif;
-  letter-spacing: 0.02em;
+.labelTab {
+  font-family: 'Yomogi', cursive;
+  font-size: 0.62rem;
+  font-weight: 400;
+  padding: 3px 8px 5px;
+  border-radius: 5px 5px 0 0;   /* 上だけ丸く・下はカードに刺さる */
   white-space: nowrap;
   position: relative;
-  /* 3D 付箋シャドウ */
   box-shadow:
-    1px 2px 6px rgba(0, 0, 0, 0.2),
-    0 5px 12px rgba(0, 0, 0, 0.1),
-    0 1px 0 rgba(255, 255, 255, 0.55) inset;
-  transform: rotate(-1.5deg);
-  transform-origin: bottom left;
-}
-
-.labelBar:nth-child(even) {
-  transform: rotate(0.8deg);
-  transform-origin: bottom right;
+    0 -2px 5px rgba(0, 0, 0, 0.15),
+    1px 0 0 rgba(255, 255, 255, 0.5) inset;
 }
 
 /* 折れ目（右下コーナー） */
-.labelBar::after {
+.labelTab::after {
   content: '';
   position: absolute;
-  bottom: -2px;
-  right: -1px;
-  width: 9px;
-  height: 9px;
+  bottom: 0;
+  right: 0;
+  width: 7px;
+  height: 7px;
   background: linear-gradient(225deg, rgba(0, 0, 0, 0.12) 50%, transparent 50%);
-  border-radius: 0 0 0 3px;
 }
 
 /* ===== タイトル ===== */
 .title {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 600;
   color: #3d3557;
-  margin: 0 0 6px;
-  line-height: 1.4;
+  margin: 0 0 3px;
+  line-height: 1.3;
 }
 
-/* ===== メタ（優先度・期限） ===== */
+/* ===== メタ（優先度・期限・ボタン） ===== */
 .meta {
   display: flex;
   align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.spacer {
+  flex: 1;
 }
 
 .badge {
-  font-size: 0.72rem;
+  font-size: 0.65rem;
   font-weight: 700;
-  padding: 2px 8px;
+  padding: 1px 6px;
   border-radius: 99px;
   letter-spacing: 0.02em;
 }
@@ -95,7 +90,7 @@
 .badgeLow    { background: #d1fae5; color: #065f46; }
 
 .dueDate {
-  font-size: 0.75rem;
+  font-size: 0.68rem;
   color: #7c6fa5;
 }
 
@@ -104,50 +99,25 @@
   font-weight: 600;
 }
 
-/* ===== 編集ボタン（右下） ===== */
-.cardActions {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 6px;
-}
-
-.editButton {
-  background: none;
-  border: 1px solid #c4b5fd;
-  border-radius: 6px;
-  color: #7c3aed;
-  font-size: 0.72rem;
-  padding: 2px 8px;
-  cursor: pointer;
-  opacity: 0;
-  transition: opacity 0.15s, background 0.15s;
-}
-
-.card:hover .editButton {
-  opacity: 1;
-}
-
-.editButton:hover {
-  background: #ede9fe;
-}
-
+/* ===== アイコンボタン（編集・削除） ===== */
+.editButton,
 .deleteButton {
   background: none;
-  border: 1px solid #fca5a5;
-  border-radius: 6px;
-  color: #dc2626;
-  font-size: 0.72rem;
-  padding: 2px 8px;
+  border: none;
+  padding: 1px 2px;
+  font-size: 0.8rem;
+  line-height: 1;
   cursor: pointer;
   opacity: 0;
+  border-radius: 4px;
   transition: opacity 0.15s, background 0.15s;
-  margin-left: 4px;
+  flex-shrink: 0;
 }
 
+.card:hover .editButton,
 .card:hover .deleteButton {
   opacity: 1;
 }
 
-.deleteButton:hover {
-  background: #fee2e2;
-}
+.editButton:hover { background: #ede9fe; }
+.deleteButton:hover { background: #fee2e2; }

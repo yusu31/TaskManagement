@@ -73,7 +73,7 @@
 .sortRow {
   display: flex;
   gap: 4px;
-  padding: 6px 11px 4px;
+  padding: 8px 11px 1px;
 }
 
 /* ソートボタン（未選択状態） */
@@ -107,8 +107,8 @@
 .cards {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 8px 8px 12px;
+  gap: 4px;
+  padding: 2px 6px 4px;
   min-height: 60px;
 }
 

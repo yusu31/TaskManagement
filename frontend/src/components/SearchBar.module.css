@@ -89,7 +89,7 @@
   padding: 4px 10px;
   border-radius: 99px;
   cursor: pointer;
-  border: 2px solid transparent;
+  border: none;
   transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.1s, box-shadow 0.1s;
   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.08);
   white-space: nowrap;
@@ -105,6 +105,33 @@
 .chipActive {
   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2);
 }
+
+/* ラベル管理ボタン */
+.labelManageBtn {
+  background: #fff;
+  border: 1.5px solid #e8e2ff;
+  border-radius: 8px;
+  padding: 4px 7px;
+  font-size: 1rem;
+  cursor: pointer;
+  line-height: 1;
+  flex-shrink: 0;
+  position: relative;
+  box-shadow: 0 3px 0 #c4b5fd;
+  transition: background 0.15s, border-color 0.15s, transform 0.1s, box-shadow 0.1s;
+}
+
+.labelManageBtn:hover {
+  background: #ede9fe;
+  border-color: #c4b5fd;
+}
+
+.labelManageBtn:active {
+  transform: translateY(3px);
+  box-shadow: none;
+}
+
+
 
 /* 進捗表示（右端） */
 .progressWrap {

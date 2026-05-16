@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { Task } from '../types/task';
 import { getLabelStyle } from '../types/task';
+import { useLabelColor } from '../context/LabelColorContext';
 import { DeleteConfirmModal } from './DeleteConfirmModal';
 import styles from './TaskCard.module.css';
 
@@ -21,6 +22,7 @@ interface Props {
 export function TaskCard({ task, onEdit, onDelete }: Props) {
   const [isDragging, setIsDragging] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const colorMap = useLabelColor();
 
   const isOverdue =
     task.dueDate != null && new Date(task.dueDate) < new Date(new Date().toDateString());
@@ -42,16 +44,20 @@ export function TaskCard({ task, onEdit, onDelete }: Props) {
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      {/* 付箋ラベル */}
+      {/* カード上端からはみ出す付箋タブ */}
       {task.labels && task.labels.length > 0 && (
-        <div className={styles.labelBars}>
-          {task.labels.map((label) => {
-            const { color, bg } = getLabelStyle(label);
+        <div className={styles.labelTabs}>
+          {task.labels.map((label, i) => {
+            const { color, bg } = getLabelStyle(label, colorMap[label]);
             return (
               <span
                 key={label}
-                className={styles.labelBar}
-                style={{ background: bg, color }}
+                className={styles.labelTab}
+                style={{
+                  background: bg,
+                  color,
+                  transform: `rotate(${[-4, 2.5, -3, 3.5, -2][i % 5]}deg)`,
+                }}
                 title={label}
               >
                 {label}
@@ -64,7 +70,7 @@ export function TaskCard({ task, onEdit, onDelete }: Props) {
       {/* タイトル */}
       <p className={styles.title}>{task.title}</p>
 
-      {/* 優先度・期限 */}
+      {/* 優先度・期限・操作ボタンを1行に並べる */}
       <div className={styles.meta}>
         {task.priority && (
           <span className={`${styles.badge} ${PRIORITY_STYLE[task.priority] ?? ''}`}>
@@ -76,21 +82,20 @@ export function TaskCard({ task, onEdit, onDelete }: Props) {
             {isOverdue ? '⚠️' : '📅'} {task.dueDate.replace(/-/g, '/')}
           </span>
         )}
-      </div>
-
-      {/* 操作ボタン（右下） */}
-      <div className={styles.cardActions}>
+        <span className={styles.spacer} />
         <button
           className={styles.editButton}
           onClick={(e) => { e.stopPropagation(); onEdit(task); }}
+          title="編集"
         >
-          編集
+          ✏️
         </button>
         <button
           className={styles.deleteButton}
           onClick={(e) => { e.stopPropagation(); setShowDeleteModal(true); }}
+          title="削除"
         >
-          削除
+          🗑️
         </button>
       </div>
     </div>

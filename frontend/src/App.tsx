@@ -1,10 +1,13 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import type { Task, Status, FilterState } from './types/task';
+import { LABEL_COLORS } from './types/task';
 import { fetchTasks, updateTask, deleteTask } from './api/taskApi';
+import { LabelColorContext } from './context/LabelColorContext';
 import { SearchBar } from './components/SearchBar';
 import { Board } from './components/Board';
 import { TaskCreateModal } from './components/TaskCreateModal';
 import { TaskEditModal } from './components/TaskEditModal';
+import { LabelManageModal } from './components/LabelManageModal';
 import styles from './App.module.css';
 
 function App() {
@@ -25,6 +28,15 @@ function App() {
 
   // タスク編集モーダル
   const [editingTask, setEditingTask] = useState<Task | null>(null);
+
+  // ラベル管理モーダル
+  const [isLabelManageOpen, setIsLabelManageOpen] = useState(false);
+
+  // ラベル名 → パレットindex の対応表（localStorage で永続化）
+  const [labelColorMap, setLabelColorMap] = useState<Record<string, number>>(() => {
+    try { return JSON.parse(localStorage.getItem('taskboard_label_colors') ?? '{}'); }
+    catch { return {}; }
+  });
 
   // カラム追加フォーム
   const [isAddingColumn, setIsAddingColumn] = useState(false);
@@ -68,12 +80,55 @@ function App() {
     [allTasks]
   );
 
-  // 全タスクに含まれるラベルの一覧（重複除去）
+  // localStorageに保存したカスタムラベル（タスクに使われていなくても存在するラベル）
+  const [customLabels, setCustomLabels] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem('taskboard_custom_labels');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  const saveCustomLabels = (labels: string[]) => {
+    setCustomLabels(labels);
+    localStorage.setItem('taskboard_custom_labels', JSON.stringify(labels));
+  };
+
+  // 全タスクに含まれるラベル ＋ カスタムラベルを合わせた一覧（重複除去・五十音順）
   const allLabels = useMemo(() => {
     const set = new Set<string>();
     allTasks.forEach((t) => t.labels.forEach((l) => set.add(l)));
-    return Array.from(set);
-  }, [allTasks]);
+    customLabels.forEach((l) => set.add(l));
+    return Array.from(set).sort((a, b) => a.localeCompare(b, 'ja'));
+  }, [allTasks, customLabels]);
+
+  // allLabels に新しいラベルが増えたら、未使用のパレットindexを順番に割り当てる
+  useEffect(() => {
+    const usedIndices = new Set(Object.values(labelColorMap));
+    const newMap = { ...labelColorMap };
+    let changed = false;
+    let nextIdx = 0;
+    for (const label of allLabels) {
+      if (newMap[label] === undefined) {
+        // 16色すべて使い切った場合はループを抜けて色を再利用する
+        let searched = 0;
+        while (usedIndices.has(nextIdx % LABEL_COLORS.length) && searched < LABEL_COLORS.length) {
+          nextIdx++;
+          searched++;
+        }
+        const assignedIdx = nextIdx % LABEL_COLORS.length;
+        newMap[label] = assignedIdx;
+        usedIndices.add(assignedIdx);
+        nextIdx++;
+        changed = true;
+      }
+    }
+    if (changed) {
+      setLabelColorMap(newMap);
+      localStorage.setItem('taskboard_label_colors', JSON.stringify(newMap));
+    }
+  }, [allLabels]);
 
   // ===== ドラッグ&ドロップ =====
   const handleDrop = useCallback(
@@ -181,6 +236,7 @@ function App() {
   };
 
   return (
+    <LabelColorContext.Provider value={labelColorMap}>
     <div className={styles.app}>
       <header className={styles.header}>
         <h1 className={styles.logo}>TaskBoard</h1>
@@ -214,6 +270,7 @@ function App() {
         filteredCount={filteredTasks.length}
         allLabels={allLabels}
         doneCount={doneCount}
+        onLabelManage={() => setIsLabelManageOpen(true)}
       />
 
       <Board
@@ -235,6 +292,25 @@ function App() {
         />
       )}
 
+      {isLabelManageOpen && (
+        <LabelManageModal
+          allLabels={allLabels}
+          allTasks={allTasks}
+          onClose={() => setIsLabelManageOpen(false)}
+          onUpdated={() => { load(); }}
+          onAddLabel={(label) => {
+            if (!allLabels.includes(label)) saveCustomLabels([...customLabels, label]);
+          }}
+          onDeleteCustomLabel={(label) => {
+            saveCustomLabels(customLabels.filter((l) => l !== label));
+            const newMap = { ...labelColorMap };
+            delete newMap[label];
+            setLabelColorMap(newMap);
+            localStorage.setItem('taskboard_label_colors', JSON.stringify(newMap));
+          }}
+        />
+      )}
+
       {editingTask && (
         <TaskEditModal
           task={editingTask}
@@ -244,6 +320,7 @@ function App() {
         />
       )}
     </div>
+    </LabelColorContext.Provider>
   );
 }
 
