@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { Task, UpdateTaskInput, Priority } from '../types/task';
 import { getLabelStyle } from '../types/task';
+import { useLabelColor } from '../context/LabelColorContext';
 import { updateTask } from '../api/taskApi';
 import styles from './TaskCreateModal.module.css';
 
@@ -12,6 +13,7 @@ interface Props {
 }
 
 export function TaskEditModal({ task, onClose, onUpdated, allLabels = [] }: Props) {
+  const colorMap = useLabelColor();
   const [title, setTitle]             = useState(task.title);
   const [description, setDescription] = useState(task.description ?? '');
   const [priority, setPriority]       = useState<Priority>(task.priority);
@@ -134,7 +136,7 @@ export function TaskEditModal({ task, onClose, onUpdated, allLabels = [] }: Prop
               {suggestLabels.length > 0 && (
                 <div className={styles.existingLabels}>
                   {suggestLabels.map((name) => {
-                    const { color, bg } = getLabelStyle(name);
+                    const { color, bg } = getLabelStyle(name, colorMap[name]);
                     const active = labels.includes(name);
                     return (
                       <span

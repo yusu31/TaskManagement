@@ -103,7 +103,7 @@ export function Column({ column, tasks, onEdit, onDelete, onAddTask, onDrop }: P
           onClick={() => onAddTask(column.status)}
           title={`${column.label}にタスクを追加`}
         >
-          ✏️
+          📝
         </button>
       </div>
 

@@ -1,14 +1,16 @@
 import type { FilterState } from '../types/task';
 import { getLabelStyle } from '../types/task';
+import { useLabelColor } from '../context/LabelColorContext';
 import styles from './SearchBar.module.css';
 
 interface Props {
   filter: FilterState;
   onFilterChange: (filter: FilterState) => void;
-  totalCount: number;     // 全タスク数
-  filteredCount: number;  // 絞り込み後のタスク数
-  allLabels: string[];    // 全タスクに存在するラベル一覧
-  doneCount: number;      // 完了タスク数
+  totalCount: number;
+  filteredCount: number;
+  allLabels: string[];
+  doneCount: number;
+  onLabelManage: () => void;
 }
 
 export function SearchBar({
@@ -17,7 +19,9 @@ export function SearchBar({
   totalCount,
   allLabels,
   doneCount,
+  onLabelManage,
 }: Props) {
+  const colorMap = useLabelColor();
 
   const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onFilterChange({ ...filter, q: e.target.value });
@@ -62,7 +66,7 @@ export function SearchBar({
 
       {/* ラベルフィルターチップ */}
       {sortedLabels.map((label) => {
-        const { color, bg } = getLabelStyle(label);
+        const { color, bg } = getLabelStyle(label, colorMap[label]);
         const active = filter.labels.includes(label);
         return (
           <button
@@ -79,6 +83,15 @@ export function SearchBar({
           </button>
         );
       })}
+
+      {/* ラベル管理ボタン */}
+      <button
+        className={styles.labelManageBtn}
+        onClick={onLabelManage}
+        title="ラベルを管理"
+      >
+        🏷️
+      </button>
 
       {/* 進捗表示（右端） */}
       <div className={styles.progressWrap}>
