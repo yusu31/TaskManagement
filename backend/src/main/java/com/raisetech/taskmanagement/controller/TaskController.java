@@ -63,6 +63,17 @@ public class TaskController {
         return ResponseEntity.created(location).body(created);
     }
 
+    // @DeleteMapping("/{id}") = DELETE /api/tasks/{id} に来たリクエストがこのメソッドに届く
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
+        // deleteTask() が false を返した = IDが存在しなかった → 404 Not Found
+        // deleteTask() が true を返した = 削除成功 → 204 No Content（ボディなし）
+        if (!taskService.deleteTask(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.noContent().build();
+    }
+
     // @PutMapping("/{id}") = PUT /api/tasks/{id} に来たリクエストがこのメソッドに届く
     // {id} の部分は @PathVariable Long id で受け取る
     @PutMapping("/{id}")
