@@ -111,7 +111,12 @@ function App() {
     let nextIdx = 0;
     for (const label of allLabels) {
       if (newMap[label] === undefined) {
-        while (usedIndices.has(nextIdx % LABEL_COLORS.length)) nextIdx++;
+        // 16色すべて使い切った場合はループを抜けて色を再利用する
+        let searched = 0;
+        while (usedIndices.has(nextIdx % LABEL_COLORS.length) && searched < LABEL_COLORS.length) {
+          nextIdx++;
+          searched++;
+        }
         const assignedIdx = nextIdx % LABEL_COLORS.length;
         newMap[label] = assignedIdx;
         usedIndices.add(assignedIdx);
